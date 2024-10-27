@@ -4,7 +4,7 @@ async function userLogout(req, res) {
     res.clearCookie("token", {
       httpOnly: true,
       secure: true, // เพื่อความปลอดภัยใน production
-      sameSite: 'strict',
+      sameSite: 'None',
     });
 
     // ส่ง response เมื่อ logout สำเร็จ

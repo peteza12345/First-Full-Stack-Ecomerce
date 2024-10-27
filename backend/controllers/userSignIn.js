@@ -11,7 +11,7 @@ async function userSignInController(req, res) {
     if (!email) return res.status(400).json({ message: 'Please provide an email' });
     if (!password) return res.status(400).json({ message: 'Please provide a password' });
 
-    const user = await userModel.findOne({email})
+    const user = await userModel.findOne({ email })
 
     if (!user) {
       return res.status(400).json({ message: 'User not found' });
@@ -21,19 +21,19 @@ async function userSignInController(req, res) {
 
     if (checkPassword) {
       const tokenData = {
-        _id: user._id, 
+        _id: user._id,
         email: user.email
       };
-      const token = jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, { expiresIn: '8h'});
-      const tokenOption = { httpOnly: true, secure: true };
+      const token = jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, { expiresIn: '8h' });
+      const tokenOption = { httpOnly: true, secure: true, sameSite: 'None' };
 
       return res.cookie('token', token, tokenOption)
-      .status(200).json({ 
-        data: token, 
-        message: 'Login successfully', 
-        success: true, 
-        error: false 
-      });
+        .status(200).json({
+          data: token,
+          message: 'Login successfully',
+          success: true,
+          error: false
+        });
 
     } else {
       return res.status(400).json({ message: 'Please check Password' });
